@@ -1,1 +1,48 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"><script src="https://telegram.org/js/telegram-web-app.js"></script><style>body{font-family:sans-serif;background:#0f0f0f;color:#fff;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}.header{padding:15px;text-align:center;background:#1a1a1a;border-bottom:2px solid #ffd700}#score{font-size:42px;font-weight:bold;color:#ffd700}.content{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center}.page{display:none;width:100%;height:100%;flex-direction:column;align-items:center;justify-content:center}.active{display:flex}#bobr{width:200px;transition:0.1s;cursor:pointer}#bobr:active{transform:scale(.95)}.energy-container{width:80%;background:#333;height:20px;border-radius:10px;margin-top:20px;overflow:hidden}#energy-bar{background:#ffd700;height:100%;width:100%;transition:.3s}.card{background:#222;padding:15px;margin:10px;border-radius:12px;width:85%;display:flex;justify-content:space-between;align-items:center}.btn{background:#ffd700;color:#000;border:none;padding:10px;border-radius:8px;font-weight:bold}.nav{display:flex;background:#1a1a1a;padding:10px 0;border-top:1px solid #333}.nav-item{flex:1;text-align:center;color:#888;font-size:14px}</style></head><body><div class="header"><div id="score">0</div></div><div class="content"><div id="p1" class="page active"><img src="bobr.jpg" id="bobr"><div class="energy-container"><div id="eb"></div></div><p id="et">Енергія: 500/500</p></div><div id="p2" class="page"><h2>Магазин</h2><div class="card"><div><b>Зуби (+1)</b></div><button class="btn" id="upd">400</button></div></div><div id="p3" class="page"><h2>Місії</h2><button class="btn" id="t1">Забрати 100</button></div></div><div class="nav"><div class="nav-item" onclick="sh('p1')">🎮</div><div class="nav-item" onclick="sh('p2')">🛒</div><div class="nav-item" onclick="sh('p3')">📜</div></div><script>let tg=window.Telegram.WebApp;tg.expand();let c=0,p=1,e=500;tg.CloudStorage.getItems(['s','p'],(err,v)=>{if(!err){c=parseInt(v.s)0;p=parseInt(v.p)1;up()}});function up(){document.getElementById('score').innerText=c;document.getElementById('eb').style.width=(e/500)*100+'%';document.getElementById('et').innerText=Енергія: ${Math.floor(e)}/500;document.getElementById('upd').disabled=c<400}document.getElementById('bobr').onclick=()=>{if(e>=1){c+=p;e-=1;up();sv()}};setInterval(()=>{if(e<500){e+=1;up()}},1000);document.getElementById('upd').onclick=()=>{if(c>=400){c-=400;p+=1;up();sv()}};document.getElementById('t1').onclick=function(){c+=100;this.disabled=true;up();sv()};function sv(){tg.CloudStorage.setItem('s',c.toString());tg.CloudStorage.setItem('p',p.toString())}function sh(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active')}</script></body></html>
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Бобер Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div id="score">0</div>
+        <div style="font-size:14px;color:#888">Монетки Бобра</div>
+    </div>
+
+    <div class="content">
+        <div id="game-page" class="page active">
+            <img src="bobr.jpg" id="bobr" alt="Бобер">
+            <div class="energy-container"><div id="energy-bar"></div></div>
+            <p id="energy-text">Енергія: 500 / 500</p>
+        </div>
+
+        <div id="shop-page" class="page">
+            <h2>Магазин</h2>
+            <div class="card">
+                <div><b>Гострі зуби (+1)</b></div>
+                <button class="btn" id="buy-upgrade">400 🪙</button>
+            </div>
+        </div>
+
+        <div id="tasks-page" class="page">
+            <h2>Місії</h2>
+            <div class="card">
+                <div><b>Бонус</b></div>
+                <button class="btn" id="task1">Забрати 100</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav">
+        <div class="nav-item active" onclick="showPage('game-page', this)">🎮</div>
+        <div class="nav-item" onclick="showPage('shop-page', this)">🛒</div>
+        <div class="nav-item" onclick="showPage('tasks-page', this)">📜</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
