@@ -1,33 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Бобер Коїн</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { background: radial-gradient(circle, #ffde94, #bd904d); height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; overflow: hidden; font-family: sans-serif; }
-        #balance { font-size: 40px; color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-        #bobr { width: 80vw; max-width: 300px; cursor: pointer; transition: transform 0.1s; -webkit-tap-highlight-color: transparent; border-radius: 50%; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        body {
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(180deg, #1a1a1a, #4a3c31);
+            color: white;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 { margin-bottom: 10px; font-size: 24px; }
+        #score { font-size: 40px; font-weight: bold; color: #ffd700; margin: 10px 0; }
+        #bobr {
+            width: 250px;
+            cursor: pointer;
+            transition: transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
         #bobr:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
-    <div id="balance">🪙 <span id="score">0</span></div>
-    <img src="bobr.jpg" id="bobr" alt="Tap me!">
+
+    <h1>Натапай капітал!</h1>
+    <div id="score">0</div>
+    <img src="bobr.jpg" id="bobr" alt="Бобер">
 
     <script>
-        let score = 0;
-        const scoreElement = document.getElementById('score');
-        const bobr = document.getElementById('bobr');
+        // 1. Намагаємося завантажити збережені монети, або ставимо 0
+        let count = localStorage.getItem('bobr_score') ? parseInt(localStorage.getItem('bobr_score')) : 0;
+        const scoreDisplay = document.getElementById('score');
+        const bobrImg = document.getElementById('bobr');
 
-        bobr.addEventListener('click', () => {
-            score++;
-            scoreElement.innerText = score;
-            // Вібрація (тільки на телефонах)
-            if (window.Telegram.WebApp.HapticFeedback) {
-                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
-            }
+        // Виводимо збережене число при завантаженні
+        scoreDisplay.innerText = count;
+
+        // 2. Функція при кліку
+        bobrImg.addEventListener('click', () => {
+            count++;
+            scoreDisplay.innerText = count;
+            
+            // 3. Зберігаємо нове значення в пам'ять телефону
+            localStorage.setItem('bobr_score', count);
         });
     </script>
 </body>
