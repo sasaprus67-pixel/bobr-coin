@@ -3,46 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Бобер Коїн Cloud</title>
+    <title>Бобер Pro</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body {
-            text-align: center; font-family: sans-serif;
-            background: #1a1a1a; color: white; margin: 0;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
-        }
-        #score { font-size: 48px; color: #ffd700; }
-        #bobr { width: 250px; cursor: pointer; transition: 0.1s; -webkit-tap-highlight-color: transparent; }
-        #bobr:active { transform: scale(0.9); }
+        body{font-family:sans-serif;background:#0f0f0f;color:#fff;margin:0;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+        .header{padding:15px;text-align:center;background:#1a1a1a;border-bottom:2px solid #ffd700}
+        #score{font-size:42px;font-weight:bold;color:#ffd700}
+        .content{flex-grow:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .page{display:none;width:100%;height:100%;flex-direction:column;align-items:center;justify-content:center}
+        .active{display:flex}
+        #bobr{width:220px;transition:0.1s;cursor:pointer;-webkit-tap-highlight-color:transparent}
+        #bobr:active{transform:scale(.95)}
+        #bobr.disabled{opacity:.5;filter:grayscale(1);pointer-events:none}
+        .energy-container{width:80%;background:#333;height:20px;border-radius:10px;margin-top:20px;overflow:hidden;border:1px solid #555}
+        #energy-bar{background:linear-gradient(90deg,#ffd700,#ff8c00);height:100%;width:100%;transition:.3s}
+        .card{background:#222;padding:15px;margin:10px;border-radius:12px;width:85%;display:flex;justify-content:space-between;align-items:center;border:1px solid #333}
+        .btn{background:#ffd700;color:#000;border:none;padding:10px 15px;border-radius:8px;font-weight:bold;cursor:pointer}
+        .btn:disabled{background:#555;color:#888}
+        .nav{display:flex;background:#1a1a1a;padding:10px 0;border-top:1px solid #333}
+        .nav-item{flex:1;text-align:center;color:#888;font-size:14px;cursor:pointer}
+        .nav-item.active{color:#ffd700}
     </style>
 </head>
 <body>
-    <h1>Бобер Cloud ☁️</h1>
-    <div id="score">0</div>
-    <img src="bobr.jpg" id="bobr" alt="Бобер">
-
+    <div class="header"><div id="score">0</div><div style="font-size:14px;color:#888">Монетки Бобра</div></div>
+    <div class="content">
+        <div id="game-page" class="page active">
+            <img src="bobr.jpg" id="bobr" alt="Бобер">
+            <div class="energy-container"><div id="energy-bar"></div></div>
+            <p id="energy-text" style="margin-top:5px;color:#ffd700">Енергія: 500 / 500</p>
+            <p id="per-click-text" style="color:#888">За тап: +1</p>
+        </div>
+        <div id="shop-page" class="page">
+            <h2>Магазин</h2>
+            <div class="card"><div><div><b>Гострі зуби</b></div><div style="font-size:12px;color:#aaa">+1 до тапу</div></div><button class="btn" id="buy-upgrade">400 🪙</button></div>
+        </div>
+        <div id="tasks-page" class="page">
+            <h2>Місії</h2>
+            <div class="card"><div><b>Бонус новачка</b></div><button class="btn" id="task1">Забрати 100</button></div>
+        </div>
+    </div>
+    <div class="nav">
+        <div class="nav-item active" onclick="showPage('game-page',this)">🎮 Гра</div>
+        <div class="nav-item" onclick="showPage('shop-page',this)">🛒 Магазин</div>
+        <div class="nav-item" onclick="showPage('tasks-page',this)">📜 Місії</div>
+    </div>
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand(); // Розгортаємо на весь екран
-
-        let count = 0;
-        const scoreDisplay = document.getElementById('score');
-
-        // 1. Завантажуємо дані з хмари Телеграм
-        tg.CloudStorage.getItem('score', (err, value) => {
-            if (!err && value) {
-                count = parseInt(value);
-                scoreDisplay.innerText = count;
-            }
-        });
-
-        document.getElementById('bobr').addEventListener('click', () => {
-            count++;
-            scoreDisplay.innerText = count;
-
-            // 2. Зберігаємо в хмару Телеграм
-            tg.CloudStorage.setItem('score', count.toString());
-        });
+        const tg=window.Telegram.WebApp;tg.expand();
+        let count=0,pwr=1,energy=500,maxEnergy=500;
+        const scoreDisplay=document.getElementById('score'),energyBar=document.getElementById('energy-bar'),energyText=document.getElementById('energy-text'),bobrImg=document.getElementById('bobr');
+        tg.CloudStorage.getItems(['score','pwr'],(err,v)=>{if(!err){count=parseInt(v.score)0;pwr=parseInt(v.pwr)1;updateDisplay()}});
+        function updateDisplay(){
+            scoreDisplay.innerText=Math.floor(count);
+            document.getElementById('per-click-text').innerText=За тап: +${pwr};
+            document.getElementById('buy-upgrade').disabled=count<400;
+            energyBar.style.width=(energy/maxEnergy)*100+'%';
+            energyText.innerText=Енергія: ${Math.floor(energy)} / ${maxEnergy};
+            if(energy<1)bobrImg.classList.add('disabled');else bobrImg.classList.remove('disabled');
+        }
+        bobrImg.addEventListener('click',()=>{if(energy>=1){count+=pwr;energy-=1;updateDisplay();saveData()}});
+        setInterval(()=>{if(energy<maxEnergy){energy=Math.min(maxEnergy,energy+1);updateDisplay()}},1000);
+        document.getElementById('buy-upgrade').addEventListener('click',()=>{if(count>=400){count-=400;pwr+=1;updateDisplay();saveData()}});
+        document.getElementById('task1').addEventListener('click',function(){count+=100;this.disabled=true;this.innerText="Отримано";updateDisplay();saveData()});
+        function saveData(){tg.CloudStorage.setItem('score',count.toString());tg.CloudStorage.setItem('pwr',pwr.toString())}
+        function showPage(pId,navEl){
+            document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+            document.getElementById(pId).classList.add('active');navEl.classList.add('active');
+        }
     </script>
 </body>
 </html>
