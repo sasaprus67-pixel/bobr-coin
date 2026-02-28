@@ -1,0 +1,15 @@
+body { font-family: sans-serif; background: #0f0f0f; color: white; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+.header { padding: 15px; text-align: center; background: #1a1a1a; border-bottom: 2px solid #ffd700; }
+#score { font-size: 42px; font-weight: bold; color: #ffd700; }
+.content { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.page { display: none; width: 100%; flex-direction: column; align-items: center; justify-content: center; }
+.active { display: flex; }
+#bobr { width: 220px; transition: 0.1s; cursor: pointer; }
+#bobr:active { transform: scale(0.95); }
+.energy-container { width: 80%; background: #333; height: 20px; border-radius: 10px; margin-top: 20px; overflow: hidden; }
+#energy-bar { background: #ffd700; height: 100%; width: 100%; transition: 0.3s; }
+.card { background: #222; padding: 15px; margin: 10px; border-radius: 12px; width: 85%; display: flex; justify-content: space-between; align-items: center; }
+.btn { background: #ffd700; color: black; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; }
+.nav { display: flex; background: #1a1a1a; padding: 10px 0; border-top: 1px solid #333; }
+.nav-item { flex: 1; text-align: center; font-size: 24px; cursor: pointer; opacity: 0.5; }
+.nav-item.active { opacity: 1; }
