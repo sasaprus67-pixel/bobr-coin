@@ -3,54 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Бобер Коїн</title>
+    <title>Бобер Коїн Cloud</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            text-align: center;
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(180deg, #1a1a1a, #4a3c31);
-            color: white;
-            margin: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
+            text-align: center; font-family: sans-serif;
+            background: #1a1a1a; color: white; margin: 0;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;
         }
-        h1 { margin-bottom: 10px; font-size: 24px; }
-        #score { font-size: 40px; font-weight: bold; color: #ffd700; margin: 10px 0; }
-        #bobr {
-            width: 250px;
-            cursor: pointer;
-            transition: transform 0.1s;
-            -webkit-tap-highlight-color: transparent;
-        }
+        #score { font-size: 48px; color: #ffd700; }
+        #bobr { width: 250px; cursor: pointer; transition: 0.1s; -webkit-tap-highlight-color: transparent; }
         #bobr:active { transform: scale(0.9); }
     </style>
 </head>
 <body>
-
-    <h1>Натапай капітал!</h1>
+    <h1>Бобер Cloud ☁️</h1>
     <div id="score">0</div>
     <img src="bobr.jpg" id="bobr" alt="Бобер">
 
     <script>
-        // 1. Намагаємося завантажити збережені монети, або ставимо 0
-        let count = localStorage.getItem('bobr_score') ? parseInt(localStorage.getItem('bobr_score')) : 0;
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Розгортаємо на весь екран
+
+        let count = 0;
         const scoreDisplay = document.getElementById('score');
-        const bobrImg = document.getElementById('bobr');
 
-        // Виводимо збережене число при завантаженні
-        scoreDisplay.innerText = count;
+        // 1. Завантажуємо дані з хмари Телеграм
+        tg.CloudStorage.getItem('score', (err, value) => {
+            if (!err && value) {
+                count = parseInt(value);
+                scoreDisplay.innerText = count;
+            }
+        });
 
-        // 2. Функція при кліку
-        bobrImg.addEventListener('click', () => {
+        document.getElementById('bobr').addEventListener('click', () => {
             count++;
             scoreDisplay.innerText = count;
-            
-            // 3. Зберігаємо нове значення в пам'ять телефону
-            localStorage.setItem('bobr_score', count);
+
+            // 2. Зберігаємо в хмару Телеграм
+            tg.CloudStorage.setItem('score', count.toString());
         });
     </script>
 </body>
