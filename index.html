@@ -8,41 +8,27 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <div class="header">
-        <div id="score">0</div>
-        <div style="font-size:14px;color:#888">Монетки Бобра</div>
-    </div>
-
+    <div class="header"><div id="score">0</div><div style="font-size:14px;color:#888">Монетки Бобра</div></div>
     <div class="content">
         <div id="game-page" class="page active">
             <img src="bobr.jpg" id="bobr" alt="Бобер">
             <div class="energy-container"><div id="energy-bar"></div></div>
             <p id="energy-text">Енергія: 500 / 500</p>
         </div>
-
         <div id="shop-page" class="page">
             <h2>Магазин</h2>
-            <div class="card">
-                <div><b>Гострі зуби (+1)</b></div>
-                <button class="btn" id="buy-upgrade">400 🪙</button>
-            </div>
+            <div class="card"><div><b>Гострі зуби (+1)</b></div><button class="btn" id="buy-upgrade">400 🪙</button></div>
         </div>
-
         <div id="tasks-page" class="page">
             <h2>Місії</h2>
-            <div class="card">
-                <div><b>Бонус</b></div>
-                <button class="btn" id="task1">Забрати 100</button>
-            </div>
+            <div class="card"><div><b>Бонус</b></div><button class="btn" id="task1">Забрати 100</button></div>
         </div>
     </div>
-
     <div class="nav">
         <div class="nav-item active" onclick="showPage('game-page', this)">🎮</div>
         <div class="nav-item" onclick="showPage('shop-page', this)">🛒</div>
         <div class="nav-item" onclick="showPage('tasks-page', this)">📜</div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
